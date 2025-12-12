@@ -2,8 +2,8 @@ pipeline {
     agent any
     
     environment {
-        DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials')
-        DOCKER_IMAGE = 'your-dockerhub-ummoo/ci-cd-demo-app'
+        DOCKER_HUB_CREDENTIALS = credentials('dckr_pat_UxrLRYE9UjRyFiznHNsVcM7CCo0')
+        DOCKER_IMAGE = 'ummoo/ci-cd-demo-app'
         DOCKER_TAG = "v${BUILD_NUMBER}"
         GITHUB_REPO = 'https://github.com/MyoMyintOoCV/ci-cd-demo-app.git'
         AWS_EC2_HOST = 'ec2-user@your-ec2-public-ip'
