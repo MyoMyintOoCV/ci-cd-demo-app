@@ -1,0 +1,12 @@
+pipeline {
+    agent any
+    stages {
+        stage('Dev Build & Test') {
+            steps {
+                sh 'npm ci'
+                sh 'npm test'
+                sh 'docker build -t app:dev .'
+            }
+        }
+    }
+}
