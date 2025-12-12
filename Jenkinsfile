@@ -3,9 +3,9 @@ pipeline {
     
     environment {
         DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials')
-        DOCKER_IMAGE = 'your-dockerhub-username/ci-cd-demo-app'
+        DOCKER_IMAGE = 'your-dockerhub-ummoo/ci-cd-demo-app'
         DOCKER_TAG = "v${BUILD_NUMBER}"
-        GITHUB_REPO = 'https://github.com/your-username/ci-cd-demo-app.git'
+        GITHUB_REPO = 'https://github.com/MyoMyintOoCV/ci-cd-demo-app.git'
         AWS_EC2_HOST = 'ec2-user@your-ec2-public-ip'
         AWS_SSH_KEY = credentials('aws-ec2-ssh-key')
     }
@@ -77,7 +77,7 @@ pipeline {
             emailext (
                 subject: "Pipeline Success: ${env.JOB_NAME} - ${env.BUILD_NUMBER}",
                 body: "The pipeline completed successfully.\n\nBuild: ${env.BUILD_URL}",
-                to: 'your-email@example.com'
+                to: 'mom27380@gmail.com'
             )
         }
         failure {
@@ -85,7 +85,7 @@ pipeline {
             emailext (
                 subject: "Pipeline Failed: ${env.JOB_NAME} - ${env.BUILD_NUMBER}",
                 body: "The pipeline failed. Please check: ${env.BUILD_URL}",
-                to: 'your-email@example.com'
+                to: 'mom27380@gmail.com'
             )
         }
     }
