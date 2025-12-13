@@ -9,7 +9,7 @@ pipeline {
         DOCKER_IMAGE = 'ummoo/ci-cd-demo-app'   // change to your Docker Hub username
         DOCKER_TAG = "v${BUILD_NUMBER}"
         GITHUB_REPO = 'https://github.com/MyoMyintOoCV/ci-cd-demo-app.git'
-        AWS_EC2_HOST = 'ec2-user@YOUR_EC2_PUBLIC_IP'
+        AWS_EC2_HOST = 'ec2-user@54.89.85.123'
     }
 
     stages {
