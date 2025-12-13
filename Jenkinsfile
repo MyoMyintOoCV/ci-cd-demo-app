@@ -2,10 +2,10 @@ pipeline {
     agent any
     
     environment {
-        DOCKER_HUB_CREDENTIALS = credentials('dckr_pat_UxrLRYE9UjRyFiznHNsVcM7CCo0')
-        DOCKER_IMAGE = 'ummoo/ci-cd-demo-app'
+        DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials')
+        DOCKER_IMAGE = 'your-dockerhub-username/ci-cd-demo-app'
         DOCKER_TAG = "v${BUILD_NUMBER}"
-        GITHUB_REPO = 'https://github.com/MyoMyintOoCV/ci-cd-demo-app.git'
+        GITHUB_REPO = 'https://github.com/your-username/ci-cd-demo-app.git'
         AWS_EC2_HOST = 'ec2-user@your-ec2-public-ip'
         AWS_SSH_KEY = credentials('aws-ec2-ssh-key')
     }
@@ -77,7 +77,7 @@ pipeline {
             emailext (
                 subject: "Pipeline Success: ${env.JOB_NAME} - ${env.BUILD_NUMBER}",
                 body: "The pipeline completed successfully.\n\nBuild: ${env.BUILD_URL}",
-                to: 'mom27380@gmail.com'
+                to: 'your-email@example.com'
             )
         }
         failure {
@@ -85,8 +85,73 @@ pipeline {
             emailext (
                 subject: "Pipeline Failed: ${env.JOB_NAME} - ${env.BUILD_NUMBER}",
                 body: "The pipeline failed. Please check: ${env.BUILD_URL}",
-                to: 'mom27380@gmail.com'
+                to: 'your-email@example.com'
             )
+        }
+    }
+}
+EOF
+
+# Create multiple pipeline scripts for different environments
+mkdir -p jenkins/scripts
+
+# Development pipeline
+cat > jenkins/Jenkinsfile.dev << 'EOF'
+pipeline {
+    agent any
+    stages {
+        stage('Dev Build & Test') {
+            steps {
+                sh 'npm ci'
+                sh 'npm test'
+                sh 'docker build -t app:dev .'
+            }
+        }
+    }
+}
+EOF
+
+# Staging pipeline
+cat > jenkins/Jenkinsfile.staging << 'EOF'
+pipeline {
+    agent any
+    environment {
+        DOCKER_IMAGE = 'your-dockerhub-username/app-staging'
+    }
+    stages {
+        stage('Staging Build') {
+            steps {
+                sh 'docker build -t ${DOCKER_IMAGE}:staging .'
+                sh 'docker push ${DOCKER_IMAGE}:staging'
+            }
+        }
+    }
+}
+EOF
+
+# Production pipeline
+cat > jenkins/Jenkinsfile.prod << 'EOF'
+pipeline {
+    agent any
+    environment {
+        DOCKER_IMAGE = 'your-dockerhub-username/app-prod'
+    }
+    stages {
+        stage('Production Build') {
+            steps {
+                sh 'docker build -t ${DOCKER_IMAGE}:prod .'
+                sh 'docker push ${DOCKER_IMAGE}:prod'
+            }
+        }
+        stage('Deploy to Production') {
+            steps {
+                sh '''
+                    ssh user@production-server "
+                        docker pull ${DOCKER_IMAGE}:prod
+                        docker-compose up -d
+                    "
+                '''
+            }
         }
     }
 }
