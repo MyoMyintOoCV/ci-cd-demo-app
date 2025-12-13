@@ -9,6 +9,4 @@ COPY . .
 
 EXPOSE 3000
 
-USER node
-
-CMD ["node", "app.js"]
+CMD ["node", "server.js"]
